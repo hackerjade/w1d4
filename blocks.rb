@@ -29,19 +29,21 @@ class Array
     selected
   end
 
+  # array = [1, 2, 3]
+  # array.take(1) => [1]
+  # array.drop(1) => [2, 3]
+
   def my_inject(&proc)
-    result = self[0]
-    idx = 0
-    self.my_each do |el|
-      idx += 1
-      idx == 1 ? next : result = proc.call(result, el)
+    result = self.first
+    self.drop(1).my_each do |el|
+      result = proc.call(result, el)
     end
 
     result
   end
 
   def my_sort!(&prc)
-    return self if self.length == 1 || self.length == 0
+    return self if self.length <= 1
 
     current_num = self[0]
     left_half = []
@@ -59,8 +61,16 @@ class Array
           left_half << num
         end
       end
-      end
+    end
 
     left_half.my_sort!(&prc) + [current_num] + right_half.my_sort!(&prc)
   end
 end
+
+def eval_block(*arg, &prc)
+  prc.nil? ? puts("NO BLOCK GIVEN") : prc.call(*arg)
+
+  # ask about asterisk
+end
+
+eval_block("foo", "bar")
